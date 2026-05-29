@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3 class="mb-0">
+            My Wallets
+        </h3>
+
+        <a
+            href="{% url 'wallet_add' %}"
+            class="btn btn-primary">
+
+            <i class="fas fa-plus"></i>
+            Add Wallet
+
+        </a>
+
+    </div>
+
+    <!-- Quick Transfer -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+
+            <strong>
+                Quick Transfer
+            </strong>
+
+        </div>
+
+        <div class="card-body">
+
+            <form
+                method="POST"
+                action="{% url 'transfer_add' %}">
+
+                {% csrf_token %}
+
+                <div class="row g-2 align-items-end">
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            From
+                        </label>
+
+                        <select
+                            name="send_from"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                Select Wallet
+                            </option>
+
+                            {% for wallet in wallets %}
+
+                            <option value="{{ wallet.id }}">
+
+                                {{ wallet.name }}
+                                (৳ {{ wallet.current_balance }})
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            To
+                        </label>
+
+                        <select
+                            name="send_to"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                Select Wallet
+                            </option>
+
+                            {% for wallet in wallets %}
+
+                            <option value="{{ wallet.id }}">
+
+                                {{ wallet.name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <label class="form-label">
+                            Amount
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            min="0.01"
+                            name="amount"
+                            class="form-control"
+                            placeholder="0.00"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <button
+                            type="submit"
+                            class="btn btn-success w-100">
+
+                            <i class="fas fa-paper-plane"></i>
+                            Send
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        {% for wallet in wallets %}
+
+        <div class="col-md-4 col-lg-3 mb-4">
+
+            <div
+                class="card shadow-sm h-100 wallet-card"
+                onclick="window.location='{% url 'wallet_detail' wallet.id %}'">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h5 class="card-title">
+
+                                {{ wallet.name }}
+
+                            </h5>
+
+                            <h6 class="text-muted mb-1">
+
+                                Current Balance
+
+                            </h6>
+
+                            <h4 class="text-success">
+
+                                ৳ {{ wallet.current_balance }}
+
+                            </h4>
+
+                            <small class="text-muted">
+
+                                Opening:
+                                ৳ {{ wallet.opening_balance }}
+
+                            </small>
+
+                        </div>
+
+                        <div>
+
+                            <a
+                                href="{% url 'wallet_edit' wallet.id %}"
+                                class="btn btn-sm btn-warning"
+                                onclick="event.stopPropagation();">
+
+                                Edit
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <small class="text-muted">
+
+                        Click to view transaction history
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="col-12">
+
+            <div class="alert alert-info">
+
+                No wallets found.
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<style>
+
+.wallet-card{
+    cursor:pointer;
+    transition:all .25s ease;
+}
+
+.wallet-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+</style>
+
+{% endblock %}

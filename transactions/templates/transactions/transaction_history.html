@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Transaction History
+{% endblock %}
+
+{% block content %}
+
+<div class="card p-4">
+
+    <div class="d-flex justify-content-between mb-4">
+
+        <h3>
+            Transaction History
+        </h3>
+
+        <a href="{% url 'transaction_list' %}"
+           class="btn btn-primary">
+
+            Back
+
+        </a>
+
+    </div>
+
+    <div class="mb-4">
+
+        <h5>
+            Current Transaction
+        </h5>
+
+        <p>
+            Category:
+            <strong>
+                {{ transaction.category.name }}
+            </strong>
+        </p>
+
+        <p>
+            Type:
+            <strong>
+                {{ transaction.transaction_type|title }}
+            </strong>
+        </p>
+
+        <p>
+            Amount:
+            <strong>
+                ৳ {{ transaction.amount }}
+            </strong>
+        </p>
+
+    </div>
+
+    <table class="table">
+
+        <thead>
+
+            <tr>
+
+                <th>Date</th>
+
+                <th>Category</th>
+
+                <th>Type</th>
+
+                <th>Amount</th>
+
+                <th>Changed By</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for history in histories %}
+
+            <tr>
+
+                <td>
+                    {{ history.changed_at }}
+                </td>
+
+                <td>
+                    {{ history.category_name }}
+                </td>
+
+                <td>
+                    {{ history.transaction_type|title }}
+                </td>
+
+                <td>
+                    ৳ {{ history.amount }}
+                </td>
+
+                <td>
+                    {{ history.changed_by.username }}
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="5">
+
+                    No history found.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

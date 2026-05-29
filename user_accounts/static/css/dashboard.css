@@ -1,0 +1,102 @@
+/* DASHBOARD GRID */
+
+.dashboard-grid{
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:20px;
+
+    margin-bottom:30px;
+}
+
+
+/* CARD */
+
+.dashboard-card{
+    background:#fff;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    box-shadow:0 4px 20px rgba(0,0,0,0.05);
+
+    transition:0.3s;
+}
+
+
+.dashboard-card:hover{
+    transform:translateY(-4px);
+}
+
+
+.card-title{
+    color:#6b7280;
+
+    font-size:14px;
+
+    margin-bottom:10px;
+}
+
+
+.card-value{
+    font-size:32px;
+
+    font-weight:700;
+}
+
+
+/* COLORS */
+
+.income{
+    color:#16a34a;
+}
+
+.expense{
+    color:#dc2626;
+}
+
+.balance{
+    color:#2563eb;
+}
+
+
+/* TABLE */
+
+.custom-table{
+    background:#fff;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:0 4px 20px rgba(0,0,0,0.05);
+}
+
+
+.table-header{
+    padding:20px 25px;
+
+    border-bottom:1px solid #e5e7eb;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+
+.table-title{
+    font-size:20px;
+    font-weight:700;
+}
+
+
+.table{
+    margin:0;
+}
+
+
+.table th{
+    background:#f9fafb;
+}

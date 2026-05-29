@@ -1,0 +1,150 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <div class="container-fluid">
+
+
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <div
+            class="collapse navbar-collapse"
+            id="navbarNav">
+
+            <div class="ms-auto">
+
+                {% if request.user.is_authenticated %}
+
+                <ul class="navbar-nav">
+
+                    <li class="nav-item dropdown">
+
+                        <a
+                            class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+                            href="#"
+                            role="button"
+                            data-bs-toggle="dropdown">
+
+                            {% if request.user.profile.profile_photo %}
+
+                            <img
+                                src="{{ request.user.profile.profile_photo.url }}"
+                                style="
+                                    width:35px;
+                                    height:35px;
+                                    border-radius:50%;
+                                    object-fit:cover;
+                                ">
+
+                            {% else %}
+
+                            <div
+                                style="
+                                    width:35px;
+                                    height:35px;
+                                    border-radius:50%;
+                                    background:#0d6efd;
+                                    color:#fff;
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    font-size:14px;
+                                    font-weight:600;
+                                ">
+
+                                {{ request.user.username|first|upper }}
+
+                            </div>
+
+                            {% endif %}
+
+                            {{ request.user.username }}
+
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+                            <li>
+
+                                <a
+                                    class="dropdown-item"
+                                    href="{% url 'profile' %}">
+
+                                    <i class="fas fa-user me-2"></i>
+
+                                    My Profile
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a
+                                    class="dropdown-item"
+                                    href="{% url 'profile_edit' %}">
+
+                                    <i class="fas fa-user-edit me-2"></i>
+
+                                    Edit Profile
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <a
+                                    class="dropdown-item"
+                                    href="{% url 'wallet_list' %}">
+
+                                    <i class="fas fa-wallet me-2"></i>
+
+                                    My Wallets
+
+                                </a>
+
+                            </li>
+
+                            <li>
+
+                                <hr class="dropdown-divider">
+
+                            </li>
+
+                            <li>
+
+                                <a
+                                    class="dropdown-item text-danger"
+                                    href="{% url 'logout' %}">
+
+                                    <i class="fas fa-sign-out-alt me-2"></i>
+
+                                    Logout
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                </ul>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>

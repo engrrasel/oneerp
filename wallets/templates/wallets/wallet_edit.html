@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Edit Wallet
+{% endblock %}
+
+{% block content %}
+
+<div class="card p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3>
+            Edit Wallet
+        </h3>
+
+        <a
+            href="{% url 'wallet_list' %}"
+            class="btn btn-secondary">
+
+            Back
+
+        </a>
+
+    </div>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Wallet Name
+            </label>
+
+            <input
+                type="text"
+                name="name"
+                class="form-control"
+                value="{{ wallet.name }}"
+                required>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Wallet Type
+            </label>
+
+            <select
+                name="wallet_type"
+                id="walletType"
+                class="form-select">
+
+                <option value="cash"
+                    {% if wallet.wallet_type == 'cash' %}selected{% endif %}>
+                    Cash
+                </option>
+
+                <option value="bank"
+                    {% if wallet.wallet_type == 'bank' %}selected{% endif %}>
+                    Bank
+                </option>
+
+                <option value="mobile_banking"
+                    {% if wallet.wallet_type == 'mobile_banking' %}selected{% endif %}>
+                    Mobile Banking
+                </option>
+
+                <option value="card"
+                    {% if wallet.wallet_type == 'card' %}selected{% endif %}>
+                    Card
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Opening Balance
+            </label>
+
+            <input
+                type="number"
+                step="0.01"
+                min="0"
+                name="opening_balance"
+                class="form-control"
+                value="{{ wallet.opening_balance }}"
+                required>
+
+        </div>
+
+        <!-- Bank Information -->
+
+        <div id="bankFields">
+
+            <hr>
+
+            <h5>
+                Bank Information
+            </h5>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Bank Name
+                </label>
+
+                <input
+                    type="text"
+                    name="bank_name"
+                    class="form-control"
+                    value="{{ wallet.bank_name }}">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Branch Name
+                </label>
+
+                <input
+                    type="text"
+                    name="branch_name"
+                    class="form-control"
+                    value="{{ wallet.branch_name }}">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Account Name
+                </label>
+
+                <input
+                    type="text"
+                    name="account_name"
+                    class="form-control"
+                    value="{{ wallet.account_name }}">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Account Number
+                </label>
+
+                <input
+                    type="text"
+                    name="account_number"
+                    class="form-control"
+                    value="{{ wallet.account_number }}">
+
+            </div>
+
+        </div>
+
+        <!-- Mobile Banking -->
+
+        <div id="mobileFields">
+
+            <hr>
+
+            <h5>
+                Mobile Banking Information
+            </h5>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Mobile Number
+                </label>
+
+                <input
+                    type="text"
+                    name="mobile_number"
+                    class="form-control"
+                    value="{{ wallet.mobile_number }}">
+
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <button
+                type="submit"
+                class="btn btn-primary">
+
+                Update Wallet
+
+            </button>
+
+            <a
+                href="{% url 'wallet_list' %}"
+                class="btn btn-outline-secondary">
+
+                Cancel
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+
+const walletType =
+    document.getElementById(
+        'walletType'
+    );
+
+const bankFields =
+    document.getElementById(
+        'bankFields'
+    );
+
+const mobileFields =
+    document.getElementById(
+        'mobileFields'
+    );
+
+function toggleFields() {
+
+    bankFields.style.display =
+        'none';
+
+    mobileFields.style.display =
+        'none';
+
+    if (
+        walletType.value === 'bank'
+    ) {
+
+        bankFields.style.display =
+            'block';
+
+    }
+
+    if (
+        walletType.value ===
+        'mobile_banking'
+    ) {
+
+        mobileFields.style.display =
+            'block';
+
+    }
+
+}
+
+walletType.addEventListener(
+    'change',
+    toggleFields
+);
+
+toggleFields();
+
+</script>
+
+{% endblock %}

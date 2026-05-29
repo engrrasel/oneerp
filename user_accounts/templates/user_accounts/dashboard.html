@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block page_title %}
+Dashboard
+{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet"
+      href="{% static 'css/dashboard.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<!-- DASHBOARD CARDS -->
+
+<div class="dashboard-grid">
+
+    <!-- BALANCE -->
+
+    <div class="dashboard-card">
+
+        <div class="card-title">
+            Total Balance
+        </div>
+
+        <div class="card-value balance">
+
+            ৳ 50,000
+
+        </div>
+
+    </div>
+
+    <!-- INCOME -->
+
+    <div class="dashboard-card">
+
+        <div class="card-title">
+            Total Income
+        </div>
+
+        <div class="card-value income">
+
+            ৳ 80,000
+
+        </div>
+
+    </div>
+
+    <!-- EXPENSE -->
+
+    <div class="dashboard-card">
+
+        <div class="card-title">
+            Total Expense
+        </div>
+
+        <div class="card-value expense">
+
+            ৳ 30,000
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- RECENT TRANSACTIONS -->
+
+<div class="custom-table">
+
+    <div class="table-header">
+
+        <div class="table-title">
+            Recent Transactions
+        </div>
+
+        <button class="btn btn-primary">
+
+            Add Transaction
+
+        </button>
+
+    </div>
+
+    <table class="table">
+
+        <thead>
+
+            <tr>
+
+                <th>Category</th>
+
+                <th>Type</th>
+
+                <th>Amount</th>
+
+                <th>Date</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+
+                <td>Food</td>
+
+                <td>
+                    Expense
+                </td>
+
+                <td class="expense">
+                    ৳ 500
+                </td>
+
+                <td>
+                    28 May 2026
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>Salary</td>
+
+                <td>
+                    Income
+                </td>
+
+                <td class="income">
+                    ৳ 25,000
+                </td>
+
+                <td>
+                    27 May 2026
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+.top-navbar{
+    background:#fff;
+    padding:18px 30px;
+    border-bottom:1px solid #e5e7eb;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.page-title{
+    font-size:24px;
+    font-weight:700;
+    margin:0;
+}
+
+.user-info{
+    font-weight:600;
+}

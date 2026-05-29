@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        {% block title %}
+            Authentication
+        {% endblock %}
+
+    </title>
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Auth CSS -->
+
+    <link rel="stylesheet"
+          href="{% static 'css/auth.css' %}">
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+<body class="auth-body">
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- Bootstrap JS -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+
+</html>
