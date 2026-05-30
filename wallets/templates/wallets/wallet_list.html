@@ -1,18 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'wallets/css/wallet_list.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="wallet-page">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Page Header -->
 
-        <h3 class="mb-0">
-            My Wallets
-        </h3>
+    <div class="wallet-header">
+
+        <div>
+            <h2>Wallet Management</h2>
+            <p>
+                Manage all your wallets and balances
+            </p>
+        </div>
 
         <a
             href="{% url 'wallet_add' %}"
-            class="btn btn-primary">
+            class="btn-add-wallet">
 
             <i class="fas fa-plus"></i>
             Add Wallet
@@ -21,32 +31,300 @@
 
     </div>
 
-    <!-- Quick Transfer -->
+    <!-- Stats -->
 
-    <div class="card shadow-sm mb-4">
+    <div class="row g-3 mb-4">
 
-        <div class="card-header">
+        <div class="col-6 col-xl-3">
 
-            <strong>
-                Quick Transfer
-            </strong>
+            <div class="stat-card">
+
+                <span>Total Wallets</span>
+
+                <h3>
+                    {{ wallet_count }}
+                </h3>
+
+            </div>
 
         </div>
 
-        <div class="card-body">
+        <div class="col-6 col-xl-3">
 
-            <form
-                method="POST"
-                action="{% url 'transfer_add' %}">
+            <div class="stat-card">
 
-                {% csrf_token %}
+                <span>Total Balance</span>
 
-                <div class="row g-2 align-items-end">
+                <h3>
+                    ৳ {{ total_balance|floatformat:2 }}
+                </h3>
 
-                    <div class="col-md-4">
+            </div>
+
+        </div>
+
+        <div class="col-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <span>Active Wallets</span>
+
+                <h3>
+                    {{ wallet_count }}
+                </h3>
+
+            </div>
+
+        </div>
+
+        <div class="col-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <span>Status</span>
+
+                <h3>
+                    Active
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Main Content -->
+
+    <div class="row g-4">
+
+        <!-- Wallet List -->
+
+        <div class="col-lg-9">
+
+            <div class="wallet-section">
+
+            <div class="section-header">
+
+            <div class="wallet-tabs">
+
+                <a
+                    href="?group=personal&status=active"
+                    class="wallet-tab {% if selected_group == 'personal' and status == 'active' %}active{% endif %}">
+
+                    <i class="fas fa-user"></i>
+                    My Wallets
+
+                </a>
+
+                <a
+                    href="?group=business&status=active"
+                    class="wallet-tab {% if selected_group == 'business' and status == 'active' %}active{% endif %}">
+
+                    <i class="fas fa-briefcase"></i>
+                    Business Wallets
+
+                </a>
+
+                <a
+                    href="?status=archived"
+                    class="wallet-tab {% if status == 'archived' %}active{% endif %}">
+
+                    <i class="fas fa-box-archive"></i>
+                    Archived
+
+                </a>
+
+            </div>
+
+            </div>
+
+                <div class="row g-3">
+
+                    {% for wallet in wallets %}
+
+                    <div class="col-xl-4 col-lg-6">
+
+                        <div
+                            class="wallet-card"
+                            onclick="window.location='{% url 'wallet_detail' wallet.id %}'">
+
+                            <div class="wallet-top">
+
+                                <div class="wallet-icon">
+
+                                    <i class="fas fa-wallet"></i>
+
+                                </div>
+
+                        <div class="wallet-actions">
+
+                            {% if status == 'archived' %}
+
+                                <a
+                                    href="{% url 'wallet_restore' wallet.id %}"
+                                    class="restore-btn"
+                                    onclick="event.stopPropagation();">
+
+                                    <i class="fas fa-rotate-left"></i>
+
+                                </a>
+
+                            {% else %}
+
+                                <a
+                                    href="{% url 'wallet_edit' wallet.id %}"
+                                    class="edit-btn"
+                                    onclick="event.stopPropagation();">
+
+                                    <i class="fas fa-pen"></i>
+
+                                </a>
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'wallet_delete' wallet.id %}"
+                                    onclick="event.stopPropagation();">
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="delete-btn"
+                                        onclick="return confirm('Archive this wallet?');">
+
+                                        <i class="fas fa-box-archive"></i>
+
+                                    </button>
+
+                                </form>
+
+                            {% endif %}
+
+                        </div>
+
+                            </div>
+
+                            <div class="wallet-name">
+
+                                {{ wallet.name }}
+
+                            </div>
+
+                            <div class="wallet-label">
+
+                                Current Balance
+
+                            </div>
+
+                            <div class="wallet-balance">
+
+                                ৳ {{ wallet.current_balance|floatformat:2 }}
+
+                            </div>
+
+                            <div class="wallet-footer">
+
+                                Opening Balance
+
+                                <span>
+
+                                    ৳ {{ wallet.opening_balance|floatformat:2 }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% empty %}
+
+                    <div class="col-12">
+
+                        <div class="empty-box">
+
+                            <i class="fas fa-wallet"></i>
+
+                            <h4>
+                                No Wallet Found
+                            </h4>
+
+                            <p>
+                                Create your first wallet to get started.
+                            </p>
+
+
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Quick Transfer -->
+
+        <div class="col-lg-3">
+
+            <div class="transfer-card">
+
+                <h5>
+                    Quick Transfer
+                </h5>
+
+            {% if messages %}
+                {% for message in messages %}
+
+                    <div class="alert alert-danger auto-dismiss-alert mb-3">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+                 {% endif %}
+
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
 
                         <label class="form-label">
-                            From
+                            Transfer Type
+                        </label>
+
+                        <select
+                            name="transfer_type"
+                            class="form-select">
+
+                            <option value="pp">
+                                Personal → Personal
+                            </option>
+
+                            <option value="pb">
+                                Personal → Business
+                            </option>
+
+                            <option value="bb">
+                                Business → Business
+                            </option>
+
+                            <option value="bp">
+                                Business → Personal
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            From Wallet
                         </label>
 
                         <select
@@ -59,24 +337,20 @@
                             </option>
 
                             {% for wallet in wallets %}
-
-                            <option value="{{ wallet.id }}">
-
-                                {{ wallet.name }}
-                                (৳ {{ wallet.current_balance }})
-
-                            </option>
-
+                                <option value="{{ wallet.id }}">
+                                    {{ wallet.name }}
+                                </option>
                             {% endfor %}
 
                         </select>
 
                     </div>
 
-                    <div class="col-md-4">
+
+                    <div class="mb-3">
 
                         <label class="form-label">
-                            To
+                            To Wallet
                         </label>
 
                         <select
@@ -102,7 +376,7 @@
 
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="mb-3">
 
                         <label class="form-label">
                             Amount
@@ -110,138 +384,34 @@
 
                         <input
                             type="number"
-                            step="0.01"
-                            min="0.01"
                             name="amount"
                             class="form-control"
-                            placeholder="0.00"
+                            placeholder="Enter amount"
                             required>
 
                     </div>
 
-                    <div class="col-md-2">
+                    <button
+                        type="submit"
+                        class="btn-transfer">
 
-                        <button
-                            type="submit"
-                            class="btn btn-success w-100">
+                        Send Money
 
-                            <i class="fas fa-paper-plane"></i>
-                            Send
+                    </button>
 
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-    <div class="row">
-
-        {% for wallet in wallets %}
-
-        <div class="col-md-4 col-lg-3 mb-4">
-
-            <div
-                class="card shadow-sm h-100 wallet-card"
-                onclick="window.location='{% url 'wallet_detail' wallet.id %}'">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between">
-
-                        <div>
-
-                            <h5 class="card-title">
-
-                                {{ wallet.name }}
-
-                            </h5>
-
-                            <h6 class="text-muted mb-1">
-
-                                Current Balance
-
-                            </h6>
-
-                            <h4 class="text-success">
-
-                                ৳ {{ wallet.current_balance }}
-
-                            </h4>
-
-                            <small class="text-muted">
-
-                                Opening:
-                                ৳ {{ wallet.opening_balance }}
-
-                            </small>
-
-                        </div>
-
-                        <div>
-
-                            <a
-                                href="{% url 'wallet_edit' wallet.id %}"
-                                class="btn btn-sm btn-warning"
-                                onclick="event.stopPropagation();">
-
-                                Edit
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                    <hr>
-
-                    <small class="text-muted">
-
-                        Click to view transaction history
-
-                    </small>
-
-                </div>
+                </form>
 
             </div>
 
         </div>
-
-        {% empty %}
-
-        <div class="col-12">
-
-            <div class="alert alert-info">
-
-                No wallets found.
-
-            </div>
-
-        </div>
-
-        {% endfor %}
 
     </div>
 
 </div>
 
-<style>
+{% endblock %}
 
-.wallet-card{
-    cursor:pointer;
-    transition:all .25s ease;
-}
 
-.wallet-card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 .5rem 1rem rgba(0,0,0,.15)!important;
-}
-
-</style>
-
+{% block extra_js %}
+<script src="{% static 'wallets/js/wallet_list.js' %}"></script>
 {% endblock %}

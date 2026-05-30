@@ -1,0 +1,95 @@
+.wallet-form-page{
+    max-width:900px;
+    margin:30px auto;
+    padding:20px;
+}
+
+.wallet-form-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:24px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+
+.form-header{
+    margin-bottom:25px;
+}
+
+.form-header h2{
+    margin:0;
+    font-size:32px;
+    font-weight:700;
+}
+
+.form-header p{
+    margin-top:6px;
+    color:#6b7280;
+}
+
+.wallet-group-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.wallet-group-card input{
+    display:none;
+}
+
+.wallet-group-content{
+    border:2px solid #e5e7eb;
+    border-radius:16px;
+    padding:18px;
+    display:flex;
+    gap:15px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.wallet-group-content i{
+    width:50px;
+    height:50px;
+    border-radius:12px;
+    background:#ecfdf0;
+    color:#009207;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.wallet-group-card input:checked + .wallet-group-content{
+    border-color:#009207;
+    background:#f0fdf4;
+}
+
+.extra-fields{
+    display:none;
+    margin-top:20px;
+    padding:20px;
+    border-radius:16px;
+    background:#f8fafc;
+}
+
+.btn-save-wallet{
+    width:100%;
+    height:54px;
+    border:none;
+    border-radius:14px;
+    background:#009207;
+    color:#fff;
+    font-weight:700;
+    margin-top:20px;
+}
+
+.btn-save-wallet:hover{
+    background:#007305;
+}
+
+@media(max-width:768px){
+
+    .wallet-group-grid{
+        grid-template-columns:1fr;
+    }
+
+}

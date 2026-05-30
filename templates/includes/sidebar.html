@@ -52,6 +52,14 @@
 
     <ul class="flyout-submenu">
 
+                <li>
+            <a
+                href="{% url 'wallet_list' %}"
+                class="{% if active_tab == 'wallets' %}active{% endif %}">
+                Dashboard
+            </a>
+        </li>
+
         <li>
             <a
                 href="{% url 'wallet_list' %}"

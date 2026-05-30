@@ -1,30 +1,51 @@
+from datetime import date
+from decimal import Decimal
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db import models
+from django.db.models import Sum
 from django.shortcuts import (
-    render,
+    get_object_or_404,
     redirect,
-    get_object_or_404
+    render,
 )
 
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.db import models
-
-from .models import Wallet
 from transactions.models import Transaction
 
-from .models import WalletTransfer
-
-from django.db.models import Sum
-
-
-from decimal import Decimal
-from datetime import date
+from .models import (
+    Wallet,
+    WalletTransfer,
+)
 
 @login_required
 def wallet_list(request):
 
-    wallets = Wallet.objects.filter(
-        user=request.user
+    selected_group = request.GET.get(
+        'group',
+        'personal'
     )
+
+    status = request.GET.get(
+        'status',
+        'active'
+    )
+
+    if status == 'archived':
+
+        wallets = Wallet.objects.filter(
+            user=request.user,
+            is_active=False
+        )
+
+    else:
+
+        wallets = Wallet.objects.filter(
+            user=request.user,
+            wallet_group=selected_group,
+            is_active=True
+        )
+    total_balance = Decimal('0.00')
 
     for wallet in wallets:
 
@@ -36,7 +57,7 @@ def wallet_list(request):
             ).aggregate(
                 total=Sum('amount')
             )['total']
-            or 0
+            or Decimal('0.00')
         )
 
         expense = (
@@ -47,7 +68,7 @@ def wallet_list(request):
             ).aggregate(
                 total=Sum('amount')
             )['total']
-            or 0
+            or Decimal('0.00')
         )
 
         incoming_transfer = (
@@ -56,7 +77,7 @@ def wallet_list(request):
             ).aggregate(
                 total=Sum('amount')
             )['total']
-            or 0
+            or Decimal('0.00')
         )
 
         outgoing_transfer = (
@@ -65,7 +86,7 @@ def wallet_list(request):
             ).aggregate(
                 total=Sum('amount')
             )['total']
-            or 0
+            or Decimal('0.00')
         )
 
         wallet.current_balance = (
@@ -76,16 +97,20 @@ def wallet_list(request):
             - outgoing_transfer
         )
 
+        total_balance += wallet.current_balance
+
     return render(
         request,
         'wallets/wallet_list.html',
         {
             'active_tab': 'wallets',
-            'wallets': wallets
+            'wallets': wallets,
+            'selected_group': selected_group,
+            'status': status,
+            'wallet_count': wallets.count(),
+            'total_balance': total_balance,
         }
     )
-
-
 
 @login_required
 def wallet_add(request):
@@ -94,10 +119,58 @@ def wallet_add(request):
 
         Wallet.objects.create(
             user=request.user,
-            name=request.POST.get('name'),
-            opening_balance=request.POST.get(
-                'opening_balance'
-            ) or 0
+
+            name=request.POST.get(
+                'name',
+                ''
+            ).strip(),
+
+            wallet_group=request.POST.get(
+                'wallet_group',
+                'personal'
+            ),
+
+            wallet_type=request.POST.get(
+                'wallet_type',
+                'cash'
+            ),
+
+            opening_balance=Decimal(
+                request.POST.get(
+                    'opening_balance',
+                    '0'
+                )
+            ),
+
+            bank_name=request.POST.get(
+                'bank_name',
+                ''
+            ).strip(),
+
+            branch_name=request.POST.get(
+                'branch_name',
+                ''
+            ).strip(),
+
+            account_name=request.POST.get(
+                'account_name',
+                ''
+            ).strip(),
+
+            account_number=request.POST.get(
+                'account_number',
+                ''
+            ).strip(),
+
+            routing_number=request.POST.get(
+                'routing_number',
+                ''
+            ).strip(),
+
+            mobile_number=request.POST.get(
+                'mobile_number',
+                ''
+            ).strip(),
         )
 
         messages.success(
@@ -116,6 +189,8 @@ def wallet_add(request):
             'active_tab': 'wallets',
         }
     )
+
+
 @login_required
 def wallet_edit(request, pk):
 
@@ -197,17 +272,35 @@ def wallet_delete(request, pk):
         user=request.user
     )
 
-    wallet.delete()
+    wallet.is_active = False
+    wallet.save()
 
     messages.success(
         request,
-        'Wallet deleted successfully.'
+        'Wallet archived successfully.'
     )
 
-    return redirect(
-        'wallet_list'
+    return redirect('wallet_list')
+
+
+@login_required
+def wallet_restore(request, pk):
+
+    wallet = get_object_or_404(
+        Wallet,
+        pk=pk,
+        user=request.user
     )
 
+    wallet.is_active = True
+    wallet.save()
+
+    messages.success(
+        request,
+        'Wallet restored successfully.'
+    )
+
+    return redirect('wallet_list')
 
 @login_required
 def wallet_detail(request, pk):

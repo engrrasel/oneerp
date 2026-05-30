@@ -24,5 +24,13 @@ urlpatterns = [
     'transfers/add/',
     views.transfer_add,
     name='transfer_add'
-)
+),
+
+path(
+    'wallets/<int:pk>/restore/',
+    views.wallet_restore,
+    name='wallet_restore'
+),
+
+
 ]

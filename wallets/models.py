@@ -1,9 +1,14 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 from django.utils import timezone
 
 
 class Wallet(models.Model):
+
+    WALLET_GROUPS = (
+        ('personal', 'Personal'),
+        ('business', 'Business'),
+    )
 
     WALLET_TYPES = (
         ('cash', 'Cash'),
@@ -22,17 +27,29 @@ class Wallet(models.Model):
         max_length=100
     )
 
+    wallet_group = models.CharField(
+        max_length=20,
+        choices=WALLET_GROUPS,
+        default='personal'
+    )
+
     wallet_type = models.CharField(
         max_length=20,
         choices=WALLET_TYPES,
         default='cash'
     )
 
+    is_active = models.BooleanField(
+        default=True
+    )
+
     opening_balance = models.DecimalField(
-        max_digits=12,
+        max_digits=30,
         decimal_places=2,
         default=0
     )
+
+    # Bank Information
 
     bank_name = models.CharField(
         max_length=100,
@@ -59,6 +76,8 @@ class Wallet(models.Model):
         blank=True
     )
 
+    # Mobile Banking
+
     mobile_number = models.CharField(
         max_length=20,
         blank=True
@@ -72,6 +91,14 @@ class Wallet(models.Model):
         auto_now=True
     )
 
+    class Meta:
+
+        ordering = ['name']
+
+        verbose_name = 'Wallet'
+
+        verbose_name_plural = 'Wallets'
+
     def __str__(self):
 
         return self.name
@@ -81,7 +108,8 @@ class WalletTransfer(models.Model):
 
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='wallet_transfers'
     )
 
     from_wallet = models.ForeignKey(
@@ -120,9 +148,13 @@ class WalletTransfer(models.Model):
             '-id'
         ]
 
+        verbose_name = 'Wallet Transfer'
+
+        verbose_name_plural = 'Wallet Transfers'
+
     def __str__(self):
 
         return (
-            f'{self.from_wallet} → '
-            f'{self.to_wallet}'
+            f'{self.from_wallet.name} → '
+            f'{self.to_wallet.name}'
         )

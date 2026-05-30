@@ -1,237 +1,267 @@
 {% extends 'base.html' %}
 
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'wallets/css/wallet_add.css' %}">
+{% endblock %}
+
 {% block title %}
 Add Wallet
 {% endblock %}
 
 {% block content %}
 
-<div class="card p-4">
+<div class="wallet-form-page">
 
-    <h3 class="mb-4">
-        Add Wallet
-    </h3>
+    <div class="wallet-form-card">
 
-    <form method="POST">
+        <div class="form-header">
 
-        {% csrf_token %}
+            <h2>Add New Wallet</h2>
 
-        <div class="mb-3">
-
-            <label class="form-label">
-                Wallet Name
-            </label>
-
-            <input
-                type="text"
-                name="name"
-                class="form-control"
-                required>
+            <p>
+                Create personal or business wallets to manage your money.
+            </p>
 
         </div>
 
-        <div class="mb-3">
+        <form method="POST">
 
-            <label class="form-label">
-                Wallet Type
-            </label>
+            {% csrf_token %}
 
-            <select
-                name="wallet_type"
-                id="walletType"
-                class="form-select">
+            <!-- Wallet Name -->
 
-                <option value="cash">
-                    Cash
-                </option>
-
-                <option value="bank">
-                    Bank
-                </option>
-
-                <option value="mobile_banking">
-                    Mobile Banking
-                </option>
-
-                <option value="card">
-                    Card
-                </option>
-
-            </select>
-
-        </div>
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Opening Balance
-            </label>
-
-            <input
-                type="number"
-                step="0.01"
-                min="0"
-                name="opening_balance"
-                class="form-control"
-                value="0.00"
-                required>
-
-        </div>
-
-        <!-- Bank Information -->
-
-        <div id="bankFields" style="display:none;">
-
-            <hr>
-
-            <h5>
-                Bank Information
-            </h5>
-
-            <div class="mb-3">
+            <div class="mb-4">
 
                 <label class="form-label">
-                    Bank Name
+                    Wallet Name
                 </label>
 
                 <input
                     type="text"
-                    name="bank_name"
-                    class="form-control">
+                    name="name"
+                    class="form-control"
+                    placeholder="Example: Personal bKash"
+                    required>
 
             </div>
 
-            <div class="mb-3">
+            <!-- Wallet Group -->
+
+            <div class="mb-4">
 
                 <label class="form-label">
-                    Branch Name
+                    Wallet Group
                 </label>
 
-                <input
-                    type="text"
-                    name="branch_name"
-                    class="form-control">
+                <div class="wallet-group-grid">
+
+                    <label class="wallet-group-card">
+
+                        <input
+                            type="radio"
+                            name="wallet_group"
+                            value="personal"
+                            checked>
+
+                        <div class="wallet-group-content">
+
+                            <i class="fas fa-user"></i>
+
+                            <div>
+
+                                <strong>
+                                    Personal
+                                </strong>
+
+                                <small>
+                                    Personal cash and accounts
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                    <label class="wallet-group-card">
+
+                        <input
+                            type="radio"
+                            name="wallet_group"
+                            value="business">
+
+                        <div class="wallet-group-content">
+
+                            <i class="fas fa-briefcase"></i>
+
+                            <div>
+
+                                <strong>
+                                    Business
+                                </strong>
+
+                                <small>
+                                    Company and merchant accounts
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                </div>
 
             </div>
 
-            <div class="mb-3">
+            <!-- Wallet Type -->
+
+            <div class="mb-4">
 
                 <label class="form-label">
-                    Account Name
+                    Wallet Type
                 </label>
 
-                <input
-                    type="text"
-                    name="account_name"
-                    class="form-control">
+                <select
+                    name="wallet_type"
+                    id="walletType"
+                    class="form-select">
+
+                    <option value="cash">
+                        Cash
+                    </option>
+
+                    <option value="bank">
+                        Bank
+                    </option>
+
+                    <option value="mobile_banking">
+                        Mobile Banking
+                    </option>
+
+                    <option value="card">
+                        Card
+                    </option>
+
+                </select>
 
             </div>
 
-            <div class="mb-3">
+            <!-- Opening Balance -->
+
+            <div class="mb-4">
 
                 <label class="form-label">
-                    Account Number
+                    Opening Balance
                 </label>
 
-                <input
-                    type="text"
-                    name="account_number"
-                    class="form-control">
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        ৳
+                    </span>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        name="opening_balance"
+                        class="form-control"
+                        value="0.00"
+                        required>
+
+                </div>
 
             </div>
 
-        </div>
+            <!-- Bank Fields -->
 
-        <!-- Mobile Banking -->
+            <div id="bankFields" class="extra-fields">
 
-        <div id="mobileFields" style="display:none;">
+                <h5>
+                    Bank Information
+                </h5>
 
-            <hr>
+                <div class="row">
 
-            <h5>
-                Mobile Banking Information
-            </h5>
+                    <div class="col-md-6 mb-3">
 
-            <div class="mb-3">
+                        <input
+                            type="text"
+                            name="bank_name"
+                            class="form-control"
+                            placeholder="Bank Name">
 
-                <label class="form-label">
-                    Mobile Number
-                </label>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <input
+                            type="text"
+                            name="branch_name"
+                            class="form-control"
+                            placeholder="Branch Name">
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <input
+                            type="text"
+                            name="account_name"
+                            class="form-control"
+                            placeholder="Account Name">
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <input
+                            type="text"
+                            name="account_number"
+                            class="form-control"
+                            placeholder="Account Number">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Mobile Banking -->
+
+            <div id="mobileFields" class="extra-fields">
+
+                <h5>
+                    Mobile Banking Information
+                </h5>
 
                 <input
                     type="text"
                     name="mobile_number"
-                    class="form-control">
+                    class="form-control"
+                    placeholder="Mobile Number">
 
             </div>
 
-        </div>
+            <button
+                type="submit"
+                class="btn-save-wallet">
 
-        <button
-            type="submit"
-            class="btn btn-primary">
+                <i class="fas fa-save"></i>
+                Save Wallet
 
-            Save Wallet
+            </button>
 
-        </button>
+        </form>
 
-    </form>
+    </div>
 
 </div>
 
-<script>
+{% endblock %}
 
-const walletType =
-    document.getElementById(
-        'walletType'
-    );
-
-const bankFields =
-    document.getElementById(
-        'bankFields'
-    );
-
-const mobileFields =
-    document.getElementById(
-        'mobileFields'
-    );
-
-function toggleFields() {
-
-    bankFields.style.display =
-        'none';
-
-    mobileFields.style.display =
-        'none';
-
-    if (
-        walletType.value === 'bank'
-    ) {
-
-        bankFields.style.display =
-            'block';
-
-    }
-
-    if (
-        walletType.value ===
-        'mobile_banking'
-    ) {
-
-        mobileFields.style.display =
-            'block';
-
-    }
-
-}
-
-walletType.addEventListener(
-    'change',
-    toggleFields
-);
-
-toggleFields();
-
-</script>
-
+{% block extra_js %}
+<script src="{% static 'wallets/js/wallet_add.js' %}"></script>
 {% endblock %}
