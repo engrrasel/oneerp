@@ -20,6 +20,7 @@ def category_list(request):
         request,
         'expenses/category_list.html',
         {
+            'active_tab': 'categories',
             'categories': categories
         }
     )
@@ -40,8 +41,12 @@ def category_add(request):
 
     return render(
         request,
-        'expenses/category_add.html'
-    )
+        'expenses/category_add.html',
+
+        {
+            'active_tab': 'categories',
+    }
+)
 
 
 @login_required
@@ -66,6 +71,7 @@ def category_edit(request, pk):
         request,
         'expenses/category_edit.html',
         {
+            'active_tab': 'categories',
             'category': category
         }
     )

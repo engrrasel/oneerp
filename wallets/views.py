@@ -80,9 +80,11 @@ def wallet_list(request):
         request,
         'wallets/wallet_list.html',
         {
+            'active_tab': 'wallets',
             'wallets': wallets
         }
     )
+
 
 
 @login_required
@@ -91,13 +93,8 @@ def wallet_add(request):
     if request.method == 'POST':
 
         Wallet.objects.create(
-
             user=request.user,
-
-            name=request.POST.get(
-                'name'
-            ),
-
+            name=request.POST.get('name'),
             opening_balance=request.POST.get(
                 'opening_balance'
             ) or 0
@@ -114,9 +111,11 @@ def wallet_add(request):
 
     return render(
         request,
-        'wallets/wallet_add.html'
+        'wallets/wallet_add.html',
+        {
+            'active_tab': 'wallets',
+        }
     )
-
 @login_required
 def wallet_edit(request, pk):
 
@@ -184,6 +183,7 @@ def wallet_edit(request, pk):
         request,
         'wallets/wallet_edit.html',
         {
+            'active_tab': 'wallets',
             'wallet': wallet
         }
     )
@@ -349,11 +349,11 @@ def wallet_detail(request, pk):
             '-id'
         )
     )
-
     return render(
         request,
         'wallets/wallet_detail.html',
         {
+            'active_tab': 'wallets',
             'wallet': wallet,
             'transactions': transactions,
             'total_income': total_income,
@@ -365,8 +365,6 @@ def wallet_detail(request, pk):
             'transfers_in': transfers_in,
         }
     )
-
-
 
 
 @login_required

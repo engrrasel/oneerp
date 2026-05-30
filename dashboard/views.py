@@ -35,6 +35,8 @@ def dashboard_view(request):
 
     context = {
 
+        'active_tab': 'dashboard',
+
         'income_total': income_total,
 
         'expense_total': expense_total,

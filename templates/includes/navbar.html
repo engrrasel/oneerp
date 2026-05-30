@@ -1,145 +1,61 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<div class="topbar">
 
-    <div class="container-fluid">
+    <div class="topbar-right">
 
+        <div class="profile-dropdown">
 
+            <div class="profile-trigger">
 
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav">
+                <div class="profile-avatar">
 
-            <span class="navbar-toggler-icon"></span>
+                    {% if request.user.profile.profile_photo %}
 
-        </button>
+                        <img
+                            src="{{ request.user.profile.profile_photo.url }}"
+                            alt="Profile">
 
-        <div
-            class="collapse navbar-collapse"
-            id="navbarNav">
+                    {% else %}
 
-            <div class="ms-auto">
+                        {{ request.user.username|first|upper }}
 
-                {% if request.user.is_authenticated %}
+                    {% endif %}
 
-                <ul class="navbar-nav">
+                </div>
 
-                    <li class="nav-item dropdown">
+                <div class="profile-info">
 
-                        <a
-                            class="nav-link dropdown-toggle d-flex align-items-center gap-2"
-                            href="#"
-                            role="button"
-                            data-bs-toggle="dropdown">
+                    <span class="profile-name">
+                        {{ request.user.username }}
+                    </span>
 
-                            {% if request.user.profile.profile_photo %}
+                    <span class="profile-role">
+                        Administrator
+                    </span>
 
-                            <img
-                                src="{{ request.user.profile.profile_photo.url }}"
-                                style="
-                                    width:35px;
-                                    height:35px;
-                                    border-radius:50%;
-                                    object-fit:cover;
-                                ">
+                </div>
 
-                            {% else %}
+                <i class="fas fa-chevron-down"></i>
 
-                            <div
-                                style="
-                                    width:35px;
-                                    height:35px;
-                                    border-radius:50%;
-                                    background:#0d6efd;
-                                    color:#fff;
-                                    display:flex;
-                                    align-items:center;
-                                    justify-content:center;
-                                    font-size:14px;
-                                    font-weight:600;
-                                ">
+            </div>
 
-                                {{ request.user.username|first|upper }}
+            <div class="profile-menu">
 
-                            </div>
+                <a href="{% url 'profile' %}">
+                    <i class="fas fa-user"></i>
+                    My Profile
+                </a>
 
-                            {% endif %}
+                <a href="{% url 'settings' %}">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
 
-                            {{ request.user.username }}
+                <hr>
 
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-end">
-
-                            <li>
-
-                                <a
-                                    class="dropdown-item"
-                                    href="{% url 'profile' %}">
-
-                                    <i class="fas fa-user me-2"></i>
-
-                                    My Profile
-
-                                </a>
-
-                            </li>
-
-                            <li>
-
-                                <a
-                                    class="dropdown-item"
-                                    href="{% url 'profile_edit' %}">
-
-                                    <i class="fas fa-user-edit me-2"></i>
-
-                                    Edit Profile
-
-                                </a>
-
-                            </li>
-
-                            <li>
-
-                                <a
-                                    class="dropdown-item"
-                                    href="{% url 'wallet_list' %}">
-
-                                    <i class="fas fa-wallet me-2"></i>
-
-                                    My Wallets
-
-                                </a>
-
-                            </li>
-
-                            <li>
-
-                                <hr class="dropdown-divider">
-
-                            </li>
-
-                            <li>
-
-                                <a
-                                    class="dropdown-item text-danger"
-                                    href="{% url 'logout' %}">
-
-                                    <i class="fas fa-sign-out-alt me-2"></i>
-
-                                    Logout
-
-                                </a>
-
-                            </li>
-
-                        </ul>
-
-                    </li>
-
-                </ul>
-
-                {% endif %}
+                <a href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
 
             </div>
 
@@ -147,4 +63,4 @@
 
     </div>
 
-</nav>
+</div>

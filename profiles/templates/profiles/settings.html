@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Settings
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <h3>Settings</h3>
+
+    <form
+        method="POST"
+        enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="full_name"
+            value="{{ profile.full_name }}">
+
+        <button type="submit">
+            Save
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

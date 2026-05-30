@@ -1,64 +1,108 @@
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
 
-    <div class="logo">
+    <div class="brand">
 
-        Expense Tracker
+        <span class="brand-text">
+            Expense Tracker
+        </span>
+
+        <div
+            class="toggle-btn"
+            onclick="toggleSidebar(event)">
+
+            <i class="fas fa-bars"></i>
+
+        </div>
 
     </div>
 
-    <ul class="sidebar-menu">
+    <ul class="nav-links">
+
+        <!-- Dashboard -->
 
         <li>
-            <a href="{% url 'dashboard' %}">
 
-                <i class="bi bi-grid"></i>
+            <a
+                href="{% url 'dashboard' %}"
+                class="nav-item {% if active_tab == 'dashboard' %}active{% endif %}"
+                data-title="Dashboard">
 
-                Dashboard
+                <i class="fas fa-chart-pie"></i>
+
+                <span>Dashboard</span>
 
             </a>
+
         </li>
 
-        
+
+        <li class="flyout-menu">
+
+    <a
+        href="javascript:void(0)"
+        class="nav-item {% if active_tab == 'wallets' or active_tab == 'transactions' %}active{% endif %}">
+
+        <i class="fas fa-building-columns"></i>
+
+        <span>Accounts</span>
+
+        <i class="fas fa-chevron-right arrow"></i>
+
+    </a>
+
+    <ul class="flyout-submenu">
+
         <li>
-            <a href="{% url 'wallet_list' %}">
-
-                <i class="bi bi-wallet"></i>
-
+            <a
+                href="{% url 'wallet_list' %}"
+                class="{% if active_tab == 'wallets' %}active{% endif %}">
                 Wallets
             </a>
         </li>
 
         <li>
-            <a href="{% url 'transaction_list' %}">
-
-                <i class="bi bi-currency-exchange"></i>
-
+            <a
+                href="{% url 'transaction_list' %}"
+                class="{% if active_tab == 'transactions' %}active{% endif %}">
                 Transactions
-
             </a>
         </li>
 
+    </ul>
+
+</li>
+
+        <!-- Categories -->
+
         <li>
-            <a href="{% url 'category_list' %}">
 
-                <i class="bi bi-tags"></i>
+            <a
+                href="{% url 'category_list' %}"
+                class="nav-item {% if active_tab == 'categories' %}active{% endif %}"
+                data-title="Categories">
 
-                Categories
+                <i class="fas fa-tags"></i>
+
+                <span>Categories</span>
 
             </a>
+
         </li>
 
+        <!-- Reports -->
+
         <li>
-            <a href="#">
 
-                <i class="bi bi-graph-up"></i>
+            <a
+                href="#"
+                class="nav-item {% if active_tab == 'reports' %}active{% endif %}"
+                data-title="Reports">
 
-                Reports
+                <i class="fas fa-chart-line"></i>
+
+                <span>Reports</span>
 
             </a>
-        </li>
-
-        <li>
 
         </li>
 

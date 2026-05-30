@@ -4,6 +4,8 @@ from django.shortcuts import (
     get_object_or_404
 )
 
+
+from wallets.models import Wallet
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -12,6 +14,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction as db_transaction
 
 from expenses.models import Category
+
 
 from .models import (
     Transaction,
@@ -36,6 +39,7 @@ def transaction_list(request):
         request,
         'transactions/transaction_list.html',
         {
+            'active_tab': 'transactions',
             'transactions': transactions
         }
     )
@@ -57,12 +61,12 @@ def deleted_transactions(request):
         request,
         'transactions/deleted_transactions.html',
         {
+            'active_tab': 'transactions',
             'transactions': transactions
         }
     )
 
 
-from wallets.models import Wallet
 
 
 @login_required
@@ -166,6 +170,7 @@ def transaction_add(request):
         request,
         'transactions/transaction_add.html',
         {
+            'active_tab': 'transactions',
             'categories': categories,
             'wallets': wallets,
         }
@@ -308,6 +313,7 @@ def transaction_edit(request, pk):
         request,
         'transactions/transaction_edit.html',
         {
+            'active_tab': 'transactions',
             'transaction': transaction,
             'categories': categories,
             'wallets': wallets,
@@ -437,6 +443,7 @@ def transaction_history(request, pk):
         request,
         'transactions/transaction_history.html',
         {
+            'active_tab': 'transactions',
             'transaction': transaction,
             'histories': histories
         }
