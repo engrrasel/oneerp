@@ -232,6 +232,8 @@
     display:flex;
     align-items:center;
     gap:8px;
+    position:relative;
+    z-index:20;
 }
 
 .wallet-actions form{
@@ -351,6 +353,42 @@
 
 .btn-transfer:hover{
     background:var(--primary-dark);
+}
+
+.wallet-card{
+    position:relative;
+    overflow:hidden;
+}
+
+.wallet-ribbon{
+    position:absolute;
+    top:12px;
+    right:-34px;
+
+    width:120px;
+    padding:6px 0;
+
+    text-align:center;
+
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+
+    color:#fff;
+
+    transform:rotate(45deg);
+    z-index:1;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+}
+
+.wallet-ribbon.personal{
+    background:#aa0000;
+}
+
+.wallet-ribbon.business{
+    background:#6ba500;
 }
 
 /* EMPTY */

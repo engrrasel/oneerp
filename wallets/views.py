@@ -31,6 +31,7 @@ def wallet_list(request):
         'active'
     )
 
+
     if status == 'archived':
 
         wallets = Wallet.objects.filter(
@@ -45,6 +46,24 @@ def wallet_list(request):
             wallet_group=selected_group,
             is_active=True
         )
+
+
+    active_wallets = Wallet.objects.filter(
+        user=request.user,
+        is_active=True
+    )
+
+    personal_wallets = Wallet.objects.filter(
+        user=request.user,
+        wallet_group='personal',
+        is_active=True
+    )
+
+    business_wallets = Wallet.objects.filter(
+        user=request.user,
+        wallet_group='business',
+        is_active=True
+    )
     total_balance = Decimal('0.00')
 
     for wallet in wallets:
@@ -105,13 +124,15 @@ def wallet_list(request):
         {
             'active_tab': 'wallets',
             'wallets': wallets,
+            'active_wallets': active_wallets,
             'selected_group': selected_group,
             'status': status,
             'wallet_count': wallets.count(),
             'total_balance': total_balance,
+            'personal_wallets': personal_wallets,
+            'business_wallets': business_wallets,
         }
     )
-
 @login_required
 def wallet_add(request):
 
@@ -280,8 +301,12 @@ def wallet_delete(request, pk):
         'Wallet archived successfully.'
     )
 
-    return redirect('wallet_list')
+    next_url = request.POST.get('next')
 
+    if next_url:
+        return redirect(next_url)
+
+    return redirect('wallet_list')
 
 @login_required
 def wallet_restore(request, pk):
@@ -300,7 +325,13 @@ def wallet_restore(request, pk):
         'Wallet restored successfully.'
     )
 
+    next_url = request.GET.get('next')
+
+    if next_url:
+        return redirect(next_url)
+
     return redirect('wallet_list')
+
 
 @login_required
 def wallet_detail(request, pk):

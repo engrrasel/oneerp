@@ -142,13 +142,25 @@
 
                     {% for wallet in wallets %}
 
+                    
+
                     <div class="col-xl-4 col-lg-6">
+                        
+                    <div
+                        class="wallet-card"
+                        onclick="window.location='{% url 'wallet_detail' wallet.id %}'">
 
-                        <div
-                            class="wallet-card"
-                            onclick="window.location='{% url 'wallet_detail' wallet.id %}'">
+                        <div class="wallet-ribbon {{ wallet.wallet_group }}">
+                            {% if wallet.wallet_group == 'business' %}
+                                Business
+                            {% else %}
+                                Personal
+                            {% endif %}
+                        </div>
 
-                            <div class="wallet-top">
+                        <div class="wallet-top">
+                                            
+
 
                                 <div class="wallet-icon">
 
@@ -160,11 +172,10 @@
 
                             {% if status == 'archived' %}
 
-                                <a
-                                    href="{% url 'wallet_restore' wallet.id %}"
-                                    class="restore-btn"
-                                    onclick="event.stopPropagation();">
-
+                            <a
+                                href="{% url 'wallet_restore' wallet.id %}?next={{ request.get_full_path|urlencode }}"
+                                class="restore-btn"
+                                onclick="event.stopPropagation();">
                                     <i class="fas fa-rotate-left"></i>
 
                                 </a>
@@ -186,6 +197,11 @@
                                     onclick="event.stopPropagation();">
 
                                     {% csrf_token %}
+
+                                        <input
+                                        type="hidden"
+                                        name="next"
+                                        value="{{ request.get_full_path }}">
 
                                     <button
                                         type="submit"
@@ -288,7 +304,9 @@
                 {% endfor %}
                  {% endif %}
 
-
+                <form
+                    method="POST"
+                    action="{% url 'transfer_add' %}">
                     {% csrf_token %}
 
                     <div class="mb-3">
@@ -298,6 +316,7 @@
                         </label>
 
                         <select
+                            id="transfer_type"
                             name="transfer_type"
                             class="form-select">
 
@@ -328,6 +347,7 @@
                         </label>
 
                         <select
+                            id="send_from"
                             name="send_from"
                             class="form-select"
                             required>
@@ -354,6 +374,7 @@
                         </label>
 
                         <select
+                            id="send_to"
                             name="send_to"
                             class="form-select"
                             required>
@@ -413,5 +434,29 @@
 
 
 {% block extra_js %}
+
+<script>
+
+window.personalWallets = [
+{% for wallet in personal_wallets %}
+{
+    id: "{{ wallet.id }}",
+    name: "{{ wallet.name|escapejs }}"
+}{% if not forloop.last %},{% endif %}
+{% endfor %}
+];
+
+window.businessWallets = [
+{% for wallet in business_wallets %}
+{
+    id: "{{ wallet.id }}",
+    name: "{{ wallet.name|escapejs }}"
+}{% if not forloop.last %},{% endif %}
+{% endfor %}
+];
+
+</script>
+
 <script src="{% static 'wallets/js/wallet_list.js' %}"></script>
+
 {% endblock %}
