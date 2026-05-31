@@ -10,121 +10,55 @@
 <div class="wallet-detail-container">
 
     <!-- Account Information -->
-<!-- Overview Section -->
+<div class="wallet-hero">
 
-<div class="wallet-overview">
+    <div class="hero-left">
 
-    <!-- Account Information -->
+        <span class="hero-label">
+            Current Balance
+        </span>
 
-    <div class="wallet-card">
+        <h1>
+            ৳ {{ current_balance }}
+        </h1>
 
- <div class="wallet-card-header">
+    </div>
 
-    <div class="wallet-title">
+    <div class="hero-divider"></div>
 
-        <div class="wallet-icon">
-            <i class="fas fa-wallet"></i>
+    <div class="hero-right">
+
+        <div class="hero-info">
+            <span>Bank Name</span>
+            <strong>{{ wallet.bank_name|default:"-" }}</strong>
         </div>
 
-        <div>
-            <h2>{{ wallet.name }}</h2>
-            <p>Account Information</p>
+        <div class="hero-info">
+            <span>Account Number</span>
+            <strong>{{ wallet.account_number|default:"-" }}</strong>
+        </div>
+
+        <div class="hero-info">
+            <span>Account Name</span>
+            <strong>{{ wallet.account_name|default:"-" }}</strong>
+        </div>
+
+        <div class="hero-info">
+            <span>Branch</span>
+            <strong>{{ wallet.branch_name|default:"-" }}</strong>
         </div>
 
     </div>
 
-    <div class="wallet-actions">
+    <div class="hero-actions">
 
-        <a
-            href="{% url 'wallet_edit' wallet.id %}"
-            class="btn btn-primary"
-            title="Edit Wallet">
-
+        <a href="{% url 'wallet_edit' wallet.id %}">
             <i class="fas fa-pen"></i>
-
         </a>
 
-        <button
-            type="button"
-            class="btn-copy"
-            onclick="copyAccountInfo()"
-            title="Copy Account Info">
-
+        <button type="button" onclick="copyAccountInfo()">
             <i class="fas fa-copy"></i>
-
         </button>
-
-    </div>
-
-</div>
-
-        <div class="wallet-info-grid">
-
-            <div class="info-item">
-                <label>Wallet Name</label>
-                <strong>{{ wallet.name }}</strong>
-            </div>
-
-            <div class="info-item">
-                <label>Account Name</label>
-                <strong>{{ wallet.account_name|default:"-" }}</strong>
-            </div>
-
-            <div class="info-item">
-                <label>Account Number</label>
-                <strong>{{ wallet.account_number|default:"-" }}</strong>
-            </div>
-
-            <div class="info-item">
-                <label>Bank Name</label>
-                <strong>{{ wallet.bank_name|default:"-" }}</strong>
-            </div>
-
-            <div class="info-item">
-                <label>Branch Name</label>
-                <strong>{{ wallet.branch_name|default:"-" }}</strong>
-            </div>
-
-            <div class="info-item balance-highlight">
-                <label>Current Balance</label>
-                <strong>
-                    ৳ {{ current_balance }}
-                </strong>
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Statistics -->
-
-    <div class="wallet-card stats-card">
-
-        <div class="stat-item">
-
-            <span>Total Income</span>
-
-            <h3 class="income">
-                ৳ {{ total_income }}
-            </h3>
-
-        </div>
-
-        <div class="stat-divider"></div>
-
-        <div class="stat-item">
-
-            <span>Total Expense</span>
-
-            <h3 class="expense">
-                ৳ {{ total_expense }}
-            </h3>
-
-        </div>
-
-        <div class="stat-divider"></div>
-
-
 
     </div>
 
