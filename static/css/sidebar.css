@@ -310,3 +310,15 @@
         left: 0;
     }
 }
+
+.sidebar-overlay{
+    display:none;
+}
+
+.sidebar-overlay.active{
+    display:block;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:999;
+}

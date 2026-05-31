@@ -1,0 +1,385 @@
+.wallet-detail-container{
+    padding:24px;
+}
+
+/* =========================
+   TOP OVERVIEW
+========================= */
+
+.wallet-overview{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:24px;
+    margin-bottom:24px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.wallet-card,
+.content-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:20px;
+    padding:28px;
+    box-shadow:0 2px 12px rgba(15,23,42,.04);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.wallet-card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+    margin-bottom:28px;
+}
+
+.wallet-card-header h2{
+    margin:0;
+    font-size:34px;
+    font-weight:700;
+    color:#0f172a;
+    line-height:1.2;
+}
+
+.wallet-card-header p{
+    margin:6px 0 0;
+    color:#64748b;
+    font-size:14px;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.wallet-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.wallet-actions .btn,
+.wallet-actions .btn-copy{
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+    border-radius:12px;
+}
+
+.btn-copy{
+    border:1px solid #e5e7eb;
+    background:#fff;
+    color:#64748b;
+    cursor:pointer;
+    transition:.2s ease;
+}
+
+.btn-copy:hover{
+    background:#f8fafc;
+    border-color:#2563eb;
+    color:#2563eb;
+}
+
+/* =========================
+   INFO GRID
+========================= */
+
+.wallet-info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.info-item label{
+    display:block;
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+.info-item strong{
+    display:block;
+    font-size:18px;
+    font-weight:600;
+    color:#0f172a;
+    word-break:break-word;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.stat-item{
+    flex:1;
+    text-align:center;
+}
+
+.stat-item span{
+    display:block;
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+.stat-item h3{
+    margin:0;
+    font-size:34px;
+    font-weight:700;
+}
+
+.income{
+    color:#16a34a;
+}
+
+.expense{
+    color:#dc2626;
+}
+
+.balance{
+    color:#2563eb;
+}
+
+.stat-divider{
+    width:1px;
+    height:80px;
+    background:#e5e7eb;
+}
+
+/* =========================
+   TABS
+========================= */
+
+.wallet-tabs{
+    gap:12px;
+    border-bottom:1px solid #e5e7eb;
+    padding-bottom:16px;
+    margin-bottom:24px;
+}
+
+.wallet-tabs .nav-link{
+    border:none;
+    background:none;
+    border-radius:12px;
+    color:#475569;
+    font-weight:600;
+    padding:12px 20px;
+    transition:.2s ease;
+}
+
+.wallet-tabs .nav-link:hover{
+    background:#f8fafc;
+}
+
+.wallet-tabs .nav-link.active{
+    background:#eef2ff;
+    color:#4f46e5;
+}
+
+/* =========================
+   FILTER
+========================= */
+
+.filter-bar{
+    margin-bottom:24px;
+}
+
+.filter-bar .form-control,
+.filter-bar .form-select{
+    height:48px;
+    border-radius:12px;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.wallet-table{
+    margin-bottom:0;
+}
+
+.wallet-table thead th{
+    background:#f8fafc;
+    border-bottom:1px solid #e5e7eb;
+    color:#475569;
+    font-weight:600;
+    padding:14px 12px;
+    white-space:nowrap;
+}
+
+.wallet-table td{
+    padding:16px 12px;
+    vertical-align:middle;
+}
+
+.wallet-table tbody tr:hover{
+    background:#f8fafc;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty-state{
+    text-align:center;
+    padding:60px 20px;
+    color:#64748b;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media(max-width:992px){
+
+    .wallet-overview{
+        grid-template-columns:1fr;
+    }
+
+    .stats-card{
+        flex-direction:column;
+        gap:0;
+    }
+
+    .stat-divider{
+        width:100%;
+        height:1px;
+        margin:10px 0;
+    }
+
+    .stat-item{
+        width:100%;
+        padding:16px 0;
+    }
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:768px){
+
+    .wallet-detail-container{
+        padding:14px;
+    }
+
+    .wallet-card,
+    .content-card{
+        padding:18px;
+        border-radius:16px;
+    }
+
+    .wallet-card-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:14px;
+        margin-bottom:20px;
+    }
+
+    .wallet-card-header h2{
+        font-size:24px;
+    }
+
+    .wallet-card-header p{
+        font-size:13px;
+    }
+
+    /* Actions */
+
+    .wallet-actions{
+        width:100%;
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .wallet-actions .btn,
+    .wallet-actions .btn-copy{
+        width:100%;
+        height:46px;
+    }
+
+    /* Info */
+
+    .wallet-info-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+    .info-item{
+        background:#f8fafc;
+        border-radius:12px;
+        padding:12px;
+    }
+
+    .info-item strong{
+        font-size:16px;
+    }
+
+    /* Stats */
+
+    .stats-card{
+        position:sticky;
+        top:70px;
+        z-index:10;
+        background:#fff;
+    }
+
+    .stat-item h3{
+        font-size:28px;
+    }
+
+    /* Tabs */
+
+    .wallet-tabs{
+        flex-wrap:nowrap;
+        overflow-x:auto;
+        scrollbar-width:none;
+        gap:8px;
+        padding-bottom:10px;
+    }
+
+    .wallet-tabs::-webkit-scrollbar{
+        display:none;
+    }
+
+    .wallet-tabs .nav-link{
+        white-space:nowrap;
+        padding:10px 16px;
+    }
+
+    /* Filter */
+
+    .filter-bar .row > div{
+        width:100%;
+    }
+
+    .filter-bar .btn{
+        height:48px;
+    }
+
+    /* Table */
+
+    .table-responsive{
+        margin:0 -18px;
+        padding:0 18px;
+    }
+
+    .wallet-table{
+        min-width:700px;
+    }
+
+}

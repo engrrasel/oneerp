@@ -181,3 +181,30 @@
     display: flex;
     align-items: center;
 }
+
+.mobile-menu-btn{
+    display:none;
+    border:none;
+    background:none;
+    font-size:22px;
+    color:#111827;
+    cursor:pointer;
+}
+
+@media(max-width:768px){
+
+    .mobile-menu-btn{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .topbar{
+        justify-content:space-between !important;
+    }
+
+    .profile-info{
+        display:none;
+    }
+
+}
