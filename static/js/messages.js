@@ -1,62 +1,29 @@
-document.addEventListener(
-    'DOMContentLoaded',
-    function(){
+document.addEventListener('DOMContentLoaded', function () {
 
-        const alerts =
-        document.querySelectorAll(
-            '.custom-alert'
-        );
+    const alerts = document.querySelectorAll('.custom-alert');
 
-        alerts.forEach(function(alert){
+    alerts.forEach(function (alert) {
 
-            const closeBtn =
-            alert.querySelector(
-                '.alert-close'
-            );
+        const closeBtn = alert.querySelector('.alert-close');
 
-            if(closeBtn){
+        function removeAlert() {
 
-                closeBtn.addEventListener(
-                    'click',
-                    function(){
+            alert.classList.add('alert-hide');
 
-                        alert.classList.add(
-                            'alert-hide'
-                        );
+            setTimeout(function () {
+                alert.remove();
+            }, 400);
 
-                        setTimeout(
-                            function(){
+        }
 
-                                alert.remove();
+        if (closeBtn) {
 
-                            },
-                            400
-                        );
-                    }
-                );
-            }
+            closeBtn.addEventListener('click', removeAlert);
 
-            setTimeout(
-                function(){
+        }
 
-                    alert.classList.add(
-                        'alert-hide'
-                    );
+        setTimeout(removeAlert, 3000);
 
-                    setTimeout(
-                        function(){
+    });
 
-                            alert.remove();
-
-                        },
-                        400
-                    );
-
-                },
-                3000
-            );
-
-        });
-
-    }
-);
+});

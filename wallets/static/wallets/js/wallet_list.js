@@ -1,93 +1,166 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    setTimeout(function () {
 
-        const alerts =
-            document.querySelectorAll('.auto-dismiss-alert');
+const transferType =
+    document.getElementById('transfer_type');
 
-        alerts.forEach(function (alert) {
+const fromWallet =
+    document.getElementById('send_from');
 
-            alert.style.transition =
-                'all .4s ease';
+const toWallet =
+    document.getElementById('send_to');
 
-            alert.style.opacity = '0';
-            alert.style.transform =
-                'translateY(-10px)';
+if (!transferType || !fromWallet || !toWallet) {
+    return;
+}
 
-            setTimeout(function () {
-                alert.remove();
-            }, 400);
+const personalWallets =
+    window.personalWallets || [];
 
-        });
+const businessWallets =
+    window.businessWallets || [];
 
-    }, 3000);
+function fillSelect(select, wallets) {
 
-    const transferType =
-        document.getElementById('transfer_type');
+    select.innerHTML =
+        '<option value="">Select Wallet</option>';
 
-    const fromWallet =
-        document.getElementById('send_from');
+    wallets.forEach(function (wallet) {
 
-    const toWallet =
-        document.getElementById('send_to');
+        const option =
+            document.createElement('option');
 
-    if (!transferType || !fromWallet || !toWallet) {
+        option.value =
+            wallet.id;
+
+        option.textContent =
+            wallet.name;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+function updateWalletInfo() {
+
+    const card =
+        document.getElementById(
+            'from_wallet_info'
+        );
+
+    if (!card) {
         return;
     }
 
-    const personalWallets =
-        window.personalWallets || [];
+    const selectedId =
+        fromWallet.value;
 
-    const businessWallets =
-        window.businessWallets || [];
+    const allWallets = [
+        ...personalWallets,
+        ...businessWallets
+    ];
 
-    function fillSelect(select, wallets) {
+    const wallet =
+        allWallets.find(function (w) {
 
-        select.innerHTML =
-            '<option value="">Select Wallet</option>';
+            return String(w.id) ===
+                String(selectedId);
 
-        wallets.forEach(wallet => {
-
-            select.innerHTML += `
-                <option value="${wallet.id}">
-                    ${wallet.name}
-                </option>
-            `;
         });
+
+    if (!wallet) {
+
+        card.style.display = 'none';
+        return;
+
     }
 
-    function updateWallets() {
+    document.getElementById(
+        'from_account_no'
+    ).textContent =
+        wallet.account_number || '-';
 
-        const type = transferType.value;
+    document.getElementById(
+        'from_balance'
+    ).textContent =
+        '৳' + wallet.balance;
 
-        if (type === 'pp') {
+    card.style.display =
+        'block';
 
-            fillSelect(fromWallet, personalWallets);
-            fillSelect(toWallet, personalWallets);
+}
 
-        } else if (type === 'pb') {
+function updateWallets() {
 
-            fillSelect(fromWallet, personalWallets);
-            fillSelect(toWallet, businessWallets);
+    const type =
+        transferType.value;
 
-        } else if (type === 'bb') {
+    if (type === 'pp') {
 
-            fillSelect(fromWallet, businessWallets);
-            fillSelect(toWallet, businessWallets);
+        fillSelect(
+            fromWallet,
+            personalWallets
+        );
 
-        } else if (type === 'bp') {
+        fillSelect(
+            toWallet,
+            personalWallets
+        );
 
-            fillSelect(fromWallet, businessWallets);
-            fillSelect(toWallet, personalWallets);
+    } else if (type === 'pb') {
 
-        }
+        fillSelect(
+            fromWallet,
+            personalWallets
+        );
+
+        fillSelect(
+            toWallet,
+            businessWallets
+        );
+
+    } else if (type === 'bb') {
+
+        fillSelect(
+            fromWallet,
+            businessWallets
+        );
+
+        fillSelect(
+            toWallet,
+            businessWallets
+        );
+
+    } else if (type === 'bp') {
+
+        fillSelect(
+            fromWallet,
+            businessWallets
+        );
+
+        fillSelect(
+            toWallet,
+            personalWallets
+        );
+
     }
 
-    transferType.addEventListener(
-        'change',
-        updateWallets
-    );
+    updateWalletInfo();
 
-    updateWallets();
+}
+
+transferType.addEventListener(
+    'change',
+    updateWallets
+);
+
+fromWallet.addEventListener(
+    'change',
+    updateWalletInfo
+);
+
+updateWallets();
+
 
 });

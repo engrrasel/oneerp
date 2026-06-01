@@ -68,54 +68,6 @@ def wallet_list(request):
 
     for wallet in wallets:
 
-        income = (
-            Transaction.objects.filter(
-                wallet=wallet,
-                transaction_type='income',
-                is_deleted=False
-            ).aggregate(
-                total=Sum('amount')
-            )['total']
-            or Decimal('0.00')
-        )
-
-        expense = (
-            Transaction.objects.filter(
-                wallet=wallet,
-                transaction_type='expense',
-                is_deleted=False
-            ).aggregate(
-                total=Sum('amount')
-            )['total']
-            or Decimal('0.00')
-        )
-
-        incoming_transfer = (
-            WalletTransfer.objects.filter(
-                to_wallet=wallet
-            ).aggregate(
-                total=Sum('amount')
-            )['total']
-            or Decimal('0.00')
-        )
-
-        outgoing_transfer = (
-            WalletTransfer.objects.filter(
-                from_wallet=wallet
-            ).aggregate(
-                total=Sum('amount')
-            )['total']
-            or Decimal('0.00')
-        )
-
-        wallet.current_balance = (
-            wallet.opening_balance
-            + income
-            - expense
-            + incoming_transfer
-            - outgoing_transfer
-        )
-
         total_balance += wallet.current_balance
 
     return render(
@@ -438,13 +390,9 @@ def wallet_detail(request, pk):
         or 0
     )
 
-    current_balance = (
-        wallet.opening_balance
-        + total_income
-        - total_expense
-        + incoming_transfer
-        - outgoing_transfer
-    )
+    
+    current_balance = wallet.current_balance
+
 
     transfers_out = (
         WalletTransfer.objects
@@ -565,13 +513,7 @@ def transfer_add(request):
             or 0
         )
 
-        current_balance = (
-            send_from.opening_balance
-            + income
-            - expense
-            + incoming_transfer
-            - outgoing_transfer
-        )
+        current_balance = send_from.current_balance
 
         if amount > current_balance:
 

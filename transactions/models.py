@@ -144,6 +144,19 @@ class Transaction(models.Model):
                     'Future dates are not allowed.'
                 }
             )
+        
+        if self.transaction_type == 'expense':
+
+            wallet_balance = self.wallet.current_balance
+
+            if self.amount > wallet_balance:
+
+                raise ValidationError({
+                    'amount': (
+                        f'Insufficient balance. '
+                        f'Available balance: {wallet_balance}'
+                    )
+                })
 
     def save(self, *args, **kwargs):
 

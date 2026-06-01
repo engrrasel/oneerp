@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from django.db.models import Sum
 
 
 class Wallet(models.Model):
@@ -49,8 +50,6 @@ class Wallet(models.Model):
         default=0
     )
 
-    # Bank Information
-
     bank_name = models.CharField(
         max_length=100,
         blank=True
@@ -76,8 +75,6 @@ class Wallet(models.Model):
         blank=True
     )
 
-    # Mobile Banking
-
     mobile_number = models.CharField(
         max_length=20,
         blank=True
@@ -98,6 +95,55 @@ class Wallet(models.Model):
         verbose_name = 'Wallet'
 
         verbose_name_plural = 'Wallets'
+
+    @property
+    def current_balance(self):
+
+        from transactions.models import Transaction
+
+        income = (
+            Transaction.objects.filter(
+                wallet=self,
+                transaction_type='income',
+                is_deleted=False
+            ).aggregate(
+                total=Sum('amount')
+            )['total']
+            or 0
+        )
+
+        expense = (
+            Transaction.objects.filter(
+                wallet=self,
+                transaction_type='expense',
+                is_deleted=False
+            ).aggregate(
+                total=Sum('amount')
+            )['total']
+            or 0
+        )
+
+        incoming_transfer = (
+            self.incoming_transfers.aggregate(
+                total=Sum('amount')
+            )['total']
+            or 0
+        )
+
+        outgoing_transfer = (
+            self.outgoing_transfers.aggregate(
+                total=Sum('amount')
+            )['total']
+            or 0
+        )
+
+        return (
+            self.opening_balance
+            + income
+            - expense
+            + incoming_transfer
+            - outgoing_transfer
+        )
 
     def __str__(self):
 

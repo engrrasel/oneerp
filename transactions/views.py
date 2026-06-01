@@ -77,7 +77,8 @@ def transaction_add(request):
     )
 
     wallets = Wallet.objects.filter(
-        user=request.user
+        user=request.user,
+        is_active=True
     )
 
     if request.method == 'POST':

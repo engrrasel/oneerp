@@ -294,15 +294,6 @@
                     Quick Transfer
                 </h5>
 
-            {% if messages %}
-                {% for message in messages %}
-
-                    <div class="alert alert-danger auto-dismiss-alert mb-3">
-                        {{ message }}
-                    </div>
-
-                {% endfor %}
-                 {% endif %}
 
                 <form
                     method="POST"
@@ -357,12 +348,42 @@
                             </option>
 
                             {% for wallet in wallets %}
-                                <option value="{{ wallet.id }}">
-                                    {{ wallet.name }}
-                                </option>
+
+                            <option value="{{ wallet.id }}">
+
+                                {{ wallet.name }}
+
+                            </option>
+
                             {% endfor %}
 
                         </select>
+
+                    </div>
+                    <div
+                        id="from_wallet_info"
+                        class="wallet-info-card"
+                        style="display:none;">
+
+                        <div class="wallet-info-row">
+
+                            <span>Account No</span>
+
+                            <strong id="from_account_no">
+                                -
+                            </strong>
+
+                        </div>
+
+                        <div class="wallet-info-row">
+
+                            <span>Balance</span>
+
+                            <strong id="from_balance">
+                                ৳0.00
+                            </strong>
+
+                        </div>
 
                     </div>
 
@@ -382,15 +403,12 @@
                             <option value="">
                                 Select Wallet
                             </option>
-
                             {% for wallet in wallets %}
-
                             <option value="{{ wallet.id }}">
-
                                 {{ wallet.name }}
-
+                                | {{ wallet.account_number }}
+                                | ৳{{ wallet.current_balance|floatformat:2 }}
                             </option>
-
                             {% endfor %}
 
                         </select>
@@ -441,17 +459,24 @@ window.personalWallets = [
 {% for wallet in personal_wallets %}
 {
     id: "{{ wallet.id }}",
-    name: "{{ wallet.name|escapejs }}"
-}{% if not forloop.last %},{% endif %}
+    name: "{{ wallet.name|escapejs }}",
+    account_number: "{{ wallet.account_number|default:''|escapejs }}",
+    balance: "{{ wallet.current_balance }}"
+}
+{% if not forloop.last %},{% endif %}
 {% endfor %}
 ];
+
 
 window.businessWallets = [
 {% for wallet in business_wallets %}
 {
     id: "{{ wallet.id }}",
-    name: "{{ wallet.name|escapejs }}"
-}{% if not forloop.last %},{% endif %}
+    name: "{{ wallet.name|escapejs }}",
+    account_number: "{{ wallet.account_number|default:''|escapejs }}",
+    balance: "{{ wallet.current_balance }}"
+}
+{% if not forloop.last %},{% endif %}
 {% endfor %}
 ];
 

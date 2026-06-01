@@ -1,361 +1,195 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}
+Wallet Details
+{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'wallets/css/wallet_detail.css' %}">
 {% endblock %}
 
+
+
 {% block content %}
+
+<div id="toast" class="toast-notification">
+    <i class="fas fa-check-circle"></i>
+    <span>Account information copied successfully.</span>
+</div>
 
 <div class="wallet-detail-container">
 
-    <!-- Account Information -->
-<div class="wallet-hero">
+    <!-- HERO CARD -->
+    <div class="wallet-hero">
 
-    <div class="hero-left">
+        <!-- Mobile Info Button -->
+        <button
+            type="button"
+            class="info-btn"
+            onclick="showAccountInfo()">
 
-        <span class="hero-label">
-            Current Balance
-        </span>
+            <i class="fas fa-circle-info"></i>
 
-        <h1>
-            ৳ {{ current_balance }}
-        </h1>
-
-    </div>
-
-    <div class="hero-divider"></div>
-
-    <div class="hero-right">
-
-        <div class="hero-info">
-            <span>Bank Name</span>
-            <strong>{{ wallet.bank_name|default:"-" }}</strong>
-        </div>
-
-        <div class="hero-info">
-            <span>Account Number</span>
-            <strong>{{ wallet.account_number|default:"-" }}</strong>
-        </div>
-
-        <div class="hero-info">
-            <span>Account Name</span>
-            <strong>{{ wallet.account_name|default:"-" }}</strong>
-        </div>
-
-        <div class="hero-info">
-            <span>Branch</span>
-            <strong>{{ wallet.branch_name|default:"-" }}</strong>
-        </div>
-
-    </div>
-
-    <div class="hero-actions">
-
-        <a href="{% url 'wallet_edit' wallet.id %}">
-            <i class="fas fa-pen"></i>
-        </a>
-
-        <button type="button" onclick="copyAccountInfo()">
-            <i class="fas fa-copy"></i>
         </button>
 
+        <div class="hero-actions">
+
+    <button
+        type="button"
+        class="btn-copy"
+        onclick="copyAccountInfo()">
+
+        <i class="fas fa-copy"></i>
+
+    </button>
+
+    <a
+        href="{% url 'wallet_edit' wallet.id %}"
+        class="btn-edit">
+
+        <i class="fas fa-pen"></i>
+
+    </a>
+
+</div>
+
+        <!-- Balance -->
+        <div class="hero-left">
+
+            <span class="balance-label">
+                Current Balance
+            </span>
+
+            <h1>
+                ৳ {{ wallet.current_balance|default:"0.00" }}
+            </h1>
+
+        </div>
+
+        <!-- Desktop Account Info -->
+        <div class="account-info desktop-info">
+
+            <div class="info-item">
+                <span>Bank Name</span>
+                <strong>{{ wallet.bank_name|default:"-" }}</strong>
+            </div>
+
+            <div class="info-item">
+                <span>Account Number</span>
+                <strong>{{ wallet.account_number|default:"-" }}</strong>
+            </div>
+
+            <div class="info-item">
+                <span>Account Name</span>
+                <strong>{{ wallet.account_name|default:"-" }}</strong>
+            </div>
+
+            <div class="info-item">
+                <span>Branch</span>
+                <strong>{{ wallet.branch_name|default:"-" }}</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FLOATING INCOME / EXPENSE CARD -->
+
+    <div class="stats-card">
+
+        <div class="stat-item">
+
+            <span>Total Income</span>
+
+            <strong class="income">
+                ৳ {{ total_income|default:"0.00" }}
+            </strong>
+
+        </div>
+
+        <div class="stat-divider"></div>
+
+        <div class="stat-item">
+
+            <span>Total Expense</span>
+
+            <strong class="expense">
+                ৳ {{ total_expense|default:"0.00" }}
+            </strong>
+
+        </div>
+
     </div>
 
 </div>
 
-<div class="floating-stats">
+<!-- MOBILE ACCOUNT MODAL -->
 
-    <div class="stat-box">
+<div
+    id="accountModal"
+    class="account-modal">
 
-        <span>Total Income</span>
+    <div class="account-modal-content">
 
-        <strong class="income">
-            ৳ {{ total_income }}
-        </strong>
+        <div class="modal-header">
 
-    </div>
+            <h3>Account Information</h3>
 
-    <div class="stat-divider"></div>
+            <button
+                type="button"
+                onclick="hideAccountInfo()">
 
-    <div class="stat-box">
+                <i class="fas fa-times"></i>
 
-        <span>Total Expense</span>
+            </button>
 
-        <strong class="expense">
-            ৳ {{ total_expense }}
-        </strong>
+        </div>
 
-    </div>
+        <div class="account-info">
 
-</div>
-
-<!-- Tabs -->
-<div class="content-card">
-
-        <ul class="nav nav-pills wallet-tabs mb-4">
-
-            <li class="nav-item">
-                <button
-                    class="nav-link active"
-                    data-bs-toggle="pill"
-                    data-bs-target="#transactions"
-                    type="button">
-
-                    Transactions
-
-                </button>
-            </li>
-
-            <li class="nav-item">
-                <button
-                    class="nav-link"
-                    data-bs-toggle="pill"
-                    data-bs-target="#transfers"
-                    type="button">
-
-                    Send / Receive
-
-                </button>
-            </li>
-
-        </ul>
-
-        <div class="tab-content">
-
-            <!-- Transaction Tab -->
-            <div
-                class="tab-pane fade show active"
-                id="transactions">
-
-                <div class="filter-bar">
-
-                    <form method="GET">
-
-                        <div class="row g-3">
-
-                            <div class="col-lg-3">
-                                <input
-                                    type="date"
-                                    name="start_date"
-                                    value="{{ request.GET.start_date }}"
-                                    class="form-control">
-                            </div>
-
-                            <div class="col-lg-3">
-                                <input
-                                    type="date"
-                                    name="end_date"
-                                    value="{{ request.GET.end_date }}"
-                                    class="form-control">
-                            </div>
-
-                            <div class="col-lg-2">
-
-                                <select
-                                    name="type"
-                                    class="form-select">
-
-                                    <option value=""
-                                        {% if not request.GET.type %}selected{% endif %}>
-                                        All Types
-                                    </option>
-
-                                    <option value="income"
-                                        {% if request.GET.type == 'income' %}selected{% endif %}>
-                                        Income
-                                    </option>
-
-                                    <option value="expense"
-                                        {% if request.GET.type == 'expense' %}selected{% endif %}>
-                                        Expense
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                            <div class="col-lg-2">
-
-                                <input
-                                    type="text"
-                                    name="search"
-                                    value="{{ request.GET.search }}"
-                                    class="form-control"
-                                    placeholder="Search">
-
-                            </div>
-
-                            <div class="col-lg-2">
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary w-100">
-
-                                    Filter
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-                <div class="table-responsive">
-
-                    <table class="table wallet-table">
-
-                        <thead>
-
-                            <tr>
-                                <th>Date</th>
-                                <th>Type</th>
-                                <th>Category</th>
-                                <th>Amount</th>
-                                <th>Note</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            {% for tx in transactions %}
-
-                            <tr>
-
-                                <td>{{ tx.transaction_date }}</td>
-
-                                <td>
-
-                                    {% if tx.transaction_type == 'income' %}
-
-                                    <span class="badge bg-success">
-                                        Income
-                                    </span>
-
-                                    {% else %}
-
-                                    <span class="badge bg-danger">
-                                        Expense
-                                    </span>
-
-                                    {% endif %}
-
-                                </td>
-
-                                <td>{{ tx.category.name|default:"-" }}</td>
-
-                                <td>৳ {{ tx.amount }}</td>
-
-                                <td>{{ tx.note|default:"-" }}</td>
-
-                            </tr>
-
-                            {% empty %}
-
-                            <tr>
-                                <td colspan="5" class="text-center py-4">
-                                    No transactions found
-                                </td>
-                            </tr>
-
-                            {% endfor %}
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
+            <div class="info-item">
+                <span>Bank Name</span>
+                <strong>{{ wallet.bank_name|default:"-" }}</strong>
             </div>
 
-            <!-- Transfer Tab -->
-            <div
-                class="tab-pane fade"
-                id="transfers">
-
-                <div class="table-responsive">
-
-                    <table class="table wallet-table">
-
-                        <thead>
-
-                            <tr>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Wallet</th>
-                                <th>Amount</th>
-                                <th>Note</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            {% for transfer in transfers_out %}
-
-                            <tr>
-
-                                <td>{{ transfer.transfer_date }}</td>
-
-                                <td>
-                                    <span class="badge bg-danger">
-                                        Sent
-                                    </span>
-                                </td>
-
-                                <td>{{ transfer.to_wallet.name }}</td>
-
-                                <td>৳ {{ transfer.amount }}</td>
-
-                                <td>{{ transfer.note|default:"-" }}</td>
-
-                            </tr>
-
-                            {% endfor %}
-
-                            {% for transfer in transfers_in %}
-
-                            <tr>
-
-                                <td>{{ transfer.transfer_date }}</td>
-
-                                <td>
-                                    <span class="badge bg-success">
-                                        Received
-                                    </span>
-                                </td>
-
-                                <td>{{ transfer.from_wallet.name }}</td>
-
-                                <td>৳ {{ transfer.amount }}</td>
-
-                                <td>{{ transfer.note|default:"-" }}</td>
-
-                            </tr>
-
-                            {% endfor %}
-
-                            {% if not transfers_out and not transfers_in %}
-
-                            <tr>
-                                <td colspan="5" class="text-center py-4">
-                                    No transfer records found
-                                </td>
-                            </tr>
-
-                            {% endif %}
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
+            <div class="info-item">
+                <span>Account Number</span>
+                <strong>{{ wallet.account_number|default:"-" }}</strong>
             </div>
+
+            <div class="info-item">
+                <span>Account Name</span>
+                <strong>{{ wallet.account_name|default:"-" }}</strong>
+            </div>
+
+            <div class="info-item">
+                <span>Branch</span>
+                <strong>{{ wallet.branch_name|default:"-" }}</strong>
+            </div>
+
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="btn-copy"
+                onclick="copyAccountInfo()">
+
+                <i class="fas fa-copy"></i>
+                Copy
+
+            </button>
+
+            <a
+                href="{% url 'wallet_edit' wallet.id %}"
+                class="btn-edit">
+
+                <i class="fas fa-pen"></i>
+                Edit
+
+            </a>
 
         </div>
 
@@ -366,30 +200,14 @@
 {% endblock %}
 
 {% block extra_js %}
+
 <script>
-function copyAccountInfo() {
-
-    const text = `
-Account Name: {{ wallet.account_name|default:"-" }}
-Account Number: {{ wallet.account_number|default:"-" }}
-Bank: {{ wallet.bank_name|default:"-" }}
-Branch: {{ wallet.branch_name|default:"-" }}
-`;
-
-    const textarea = document.createElement('textarea');
-
-    textarea.value = text;
-
-    document.body.appendChild(textarea);
-
-    textarea.select();
-
-    document.execCommand('copy');
-
-    document.body.removeChild(textarea);
-
-    alert('Account information copied successfully.');
-
-}
+window.walletAccountName = "{{ wallet.account_name|default:'-'|escapejs }}";
+window.walletAccountNumber = "{{ wallet.account_number|default:'-'|escapejs }}";
+window.walletBankName = "{{ wallet.bank_name|default:'-'|escapejs }}";
+window.walletBranchName = "{{ wallet.branch_name|default:'-'|escapejs }}";
 </script>
+
+<script src="{% static 'wallets/js/wallet_detail.js' %}"></script>
+
 {% endblock %}
